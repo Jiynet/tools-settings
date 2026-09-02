@@ -110,10 +110,13 @@ alias py='python'
 alias update='sudo apt update && sudo apt upgrade'
 alias y='yazi'
 alias c='code .'
+alias cu='code .'
 alias t='trae-cn .'
 alias api='apifox'
 alias mconda='mv /home/jiy/workspace/miniconda3 /home/jiy/workspace/temp/miniconda3'
 alias bconda='mv /home/jiy/workspace/temp/miniconda3 /home/jiy/workspace/miniconda3'
+alias sshjiy='ssh -p 2222 jiy@xxx'
+alias sshport='ssh -p 2222 -L 18789:127.0.0.1:18789 jiy@xxx'
 
 # 如果有独立的别名文件则加载
 if [ -f ~/.bash_aliases ]; then
@@ -127,14 +130,9 @@ if command -v starship &> /dev/null; then
     eval "$(starship init zsh)"
 fi
 
-# OpenClaw Completion
-[ -f "/home/jiy/.openclaw/completions/openclaw.zsh" ] && source "/home/jiy/.openclaw/completions/openclaw.zsh"
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/jiy/workspace/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
 else
     if [ -f "/home/jiy/workspace/miniconda3/etc/profile.d/conda.sh" ]; then
         . "/home/jiy/workspace/miniconda3/etc/profile.d/conda.sh"
@@ -147,6 +145,13 @@ unset __conda_setup
 
 export DEEPSEEK_API_KEY=sk-placeholder
 
+# =====================================================================
+# API 配置（与 cc-switch解耦）
+# =====================================================================
+# Claude Code 配置
+
+# Codex CLI 配置
+
 # pnpm
 export PNPM_HOME="/home/jiy/.local/share/pnpm"
 case ":$PATH:" in
@@ -154,3 +159,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
+export PATH="$HOME/.local/bin:$PATH"# Codex CLI 更新别名
+alias update-codex="npm cache clean --force && npm uninstall -g @openai/codex && npm install -g @openai/codex@latest"
+# AI 工具更新别名
+alias update-ai-tools="/home/jiy/workspace/update-ai-tools.sh"
+alias update-claude="/home/jiy/workspace/update-claude.sh"
