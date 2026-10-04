@@ -1,5 +1,5 @@
 # 配置
 
-**Author**: Jiy (Gylor)
+**Author**: Jiy
 
-自己 ubuntu 的配置文件、个性化配置
+本人 ubuntu 的配置文件、个性化配置
