@@ -1,14 +1,10 @@
-# =====================================================================
 # 1. Oh My Zsh 核心框架配置
-# =====================================================================
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
-# =====================================================================
 # 2. 核心环境变量
-# =====================================================================
 export NVM_DIR="$HOME/.nvm"
 
 # CUDA 12.8 路径
@@ -27,28 +23,10 @@ fi
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-# =====================================================================
-# 3. NVM（推荐方案）
-# =====================================================================
+# 3. NVM
 
 export NVM_DIR="$HOME/.nvm"
 
-# ----------------------------------------------------------
-# 把当前最高版本 Node 的 bin 提前加入 PATH
-#
-# 作用：
-#   node
-#   npm
-#   npx
-#   codex
-#   claude
-#   vite
-#   tsx
-#   wrangler
-#   ...
-#
-# 全部立即可用，不需要加载 nvm
-# ----------------------------------------------------------
 
 if [ -d "$NVM_DIR/versions/node" ]; then
     LATEST_NODE="$(ls -d "$NVM_DIR"/versions/node/* 2>/dev/null | sort -V | tail -n 1)"
@@ -58,18 +36,6 @@ if [ -d "$NVM_DIR/versions/node" ]; then
     fi
 fi
 
-
-# ----------------------------------------------------------
-# nvm 懒加载
-#
-# 只有真正执行：
-#
-#     nvm install
-#     nvm use
-#     nvm ls
-#
-# 才加载 nvm.sh
-# ----------------------------------------------------------
 
 nvm() {
     unset -f nvm
@@ -82,9 +48,7 @@ nvm() {
     nvm "$@"
 }
 
-# =====================================================================
 # 4. 开发工具链与其他优化
-# =====================================================================
 brew() {
     unset -f brew
     if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
@@ -93,9 +57,7 @@ brew() {
     brew "$@"
 }
 
-# =====================================================================
 # 5. 别名系统
-# =====================================================================
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -115,24 +77,20 @@ alias t='trae-cn .'
 alias api='apifox'
 alias mconda='mv /home/jiy/workspace/miniconda3 /home/jiy/workspace/temp/miniconda3'
 alias bconda='mv /home/jiy/workspace/temp/miniconda3 /home/jiy/workspace/miniconda3'
-alias sshjiy='ssh -p 2222 jiy@xxx'
-alias sshport='ssh -p 2222 -L 18789:127.0.0.1:18789 jiy@xxx'
 
 # 如果有独立的别名文件则加载
 if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
 fi
 
-# =====================================================================
 # 6. 终端美化灵魂 (Starship 提示符)
-# =====================================================================
 if command -v starship &> /dev/null; then
-    eval "$(starship init zsh)"
-fi
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/jiy/workspace/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
 else
     if [ -f "/home/jiy/workspace/miniconda3/etc/profile.d/conda.sh" ]; then
         . "/home/jiy/workspace/miniconda3/etc/profile.d/conda.sh"
@@ -143,24 +101,17 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-export DEEPSEEK_API_KEY=sk-placeholder
-
-# =====================================================================
-# API 配置（与 cc-switch解耦）
-# =====================================================================
-# Claude Code 配置
-
-# Codex CLI 配置
-
 # pnpm
 export PNPM_HOME="/home/jiy/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME/bin:"*) ;;
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
+
 # pnpm end
-export PATH="$HOME/.local/bin:$PATH"# Codex CLI 更新别名
-alias update-codex="npm cache clean --force && npm uninstall -g @openai/codex && npm install -g @openai/codex@latest"
+export PATH="$HOME/.local/bin:$PATH"
+
 # AI 工具更新别名
-alias update-ai-tools="/home/jiy/workspace/update-ai-tools.sh"
+alias update-codex="npm cache clean --force && npm uninstall -g @openai/codex && npm install -g @openai/codex@latest"
 alias update-claude="/home/jiy/workspace/update-claude.sh"
+alias update-ai-all="/home/jiy/workspace/update-ai-tools.sh"
